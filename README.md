@@ -1,1 +1,3 @@
-codingIntervirewGuide.cpp是记录自己这么长时间以来刷过的题目，差不多每一道题都配有测试代码和运行结果，持续更新中
+algorithm.cpp是刚开始刷题的记录，很乱，仅作为纪念意义，参考意义不大。
+
+codingIntervirewGuide.cpp是继algorithm.cpp之后的刷过的记录，差不多每一道题都配有测试代码和运行结果，持续更新中...
