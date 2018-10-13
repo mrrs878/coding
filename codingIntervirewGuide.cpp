@@ -62,12 +62,12 @@ vector<int> generateRandomArray(int _maxsize, int _maxvalue) {
 	return tmp;
 }
 
-struct nod {
+struct node {
 	int value;
-	nod *lchild;
-	nod *rchild;
+	node *lchild;
+	node *rchild;
 	int pos;
-	nod(int _value = 0, int _pos = 0, nod *_lchild = nullptr, nod *_rchild = nullptr) :
+	node(int _value = 0, int _pos = 0, node *_lchild = nullptr, node *_rchild = nullptr) :
 		value(_value), lchild(_lchild), rchild(_rchild), pos(_pos) {}
 };
 //#0  template
@@ -1169,20 +1169,20 @@ private:
 		size_t lchild_ss;
 		size_t rchild_ss;
 	};
-	struct nod {
+	struct node {
 		int value;
-		nod *lchild, *rchild;
-		nod(int _value = 0, nod *_lchild = nullptr, nod *_rchild = nullptr) :
+		node *lchild, *rchild;
+		node(int _value = 0, node *_lchild = nullptr, node *_rchild = nullptr) :
 			value(_value), lchild(_lchild), rchild(_rchild) {}
 	};
-	nod src_root;
+	node src_root;
 private:
-	void addNode(nod *_father, nod *_child) {
+	void addNode(node *_father, node *_child) {
 		_father->lchild == nullptr ? _father->lchild = _child : _father->rchild = _child;
 	}
 	void levelTraverse(void) {
-		queue<nod *> que;
-		nod *tmp = nullptr;
+		queue<node *> que;
+		node *tmp = nullptr;
 
 		que.push(&src_root);
 		cout << src[que.front()->value] << ' ';
@@ -1233,9 +1233,9 @@ public:
 		}
 
 		/* generate binary tree */
-		vector<nod> tree;
+		vector<node> tree;
 		for (size_t i = 0; i < src.size(); ++i)
-			tree.push_back(*(new nod(i)));
+			tree.push_back(*(new node(i)));
 		for (size_t i = 0; i < src.size(); ++i) {
 			if (res[i].lchild_ss != -1 && res[i].rchild_ss != -1) {
 				if (src[res[i].lchild_ss] < src[res[i].rchild_ss])
@@ -1404,18 +1404,18 @@ public:
 //#20
 class morris {
 private:
-	struct nod {
+	struct node {
 		int value;
-		nod *lchild;
-		nod *rchild;
-		nod(int _value = 0, nod *_lchild = nullptr , nod *_rchild = nullptr) :
+		node *lchild;
+		node *rchild;
+		node(int _value = 0, node *_lchild = nullptr , node *_rchild = nullptr) :
 			value(_value), lchild(_lchild), rchild(_rchild) {}
 	};
-	nod *src_root;
+	node *src_root;
 private:
-	void printRightPath(nod *_head) {
+	void printRightPath(node *_head) {
 		stack<int> tmp;
-		nod *most_rchild = _head->lchild;
+		node *most_rchild = _head->lchild;
 
 		while (most_rchild != nullptr && most_rchild != _head) {
 			tmp.push(most_rchild->value);
@@ -1425,7 +1425,7 @@ private:
 	}
 	void printRightBoundary(void) {
 		stack<int> x;
-		nod *tmp = src_root;
+		node *tmp = src_root;
 
 		while (tmp != nullptr) {
 			x.push(tmp->value);
@@ -1434,15 +1434,15 @@ private:
 		stackPrint(x);
 	}
 public:
-	morris(nod *_root = nullptr) : src_root(_root) {}
+	morris(node *_root = nullptr) : src_root(_root) {}
 	void generateTree(void) {
-		queue<nod *> que;
-		nod *tmp = nullptr;
+		queue<node *> que;
+		node *tmp = nullptr;
 		int ldata = 0, rdata = 0, x = 0;
 
 		cout << "Please enter root node's value: ";
 		cin >> x;
-		src_root = new nod(x);
+		src_root = new node(x);
 		que.push(src_root);
 		while (!que.empty()) {
 			tmp = que.front();
@@ -1450,13 +1450,13 @@ public:
 			cout << "plaese enter " << tmp->value << "'s ldata and rdata: ";
 			cin >> ldata >> rdata;
 			if (ldata != 0)
-				que.push(tmp->lchild = new nod(ldata));
+				que.push(tmp->lchild = new node(ldata));
 			if (rdata != 0)
-				que.push(tmp->rchild = new nod(rdata));
+				que.push(tmp->rchild = new node(rdata));
 		}
 	}
 	void morrisPre(void) {
-		nod *cur = nullptr, *most_rchild = nullptr;
+		node *cur = nullptr, *most_rchild = nullptr;
 	    
 		cur = src_root;
 		while (cur != nullptr) {
@@ -1480,7 +1480,7 @@ public:
 	
 	}
 	void morrisMid(void) {
-		nod *cur = nullptr, *most_rchild = nullptr;
+		node *cur = nullptr, *most_rchild = nullptr;
 
 		cur = src_root;
 		while (cur != nullptr) {
@@ -1501,8 +1501,8 @@ public:
 		}
 	}
 	void morrisPost(void) {
-		nod *cur = nullptr, *most_rchild = nullptr;
-		vector<nod *> tmp;
+		node *cur = nullptr, *most_rchild = nullptr;
+		vector<node *> tmp;
 
 		cur = src_root;
 		while (cur != nullptr) {
@@ -1554,17 +1554,17 @@ public:
 //#21  continuing...
 class skylineProblem {  
 private:
-	struct nod {
+	struct node {
 		size_t position;
 		int len;
 		bool isup;
-		nod(size_t _position = 0, int _len = 0, bool _isup = false)
+		node(size_t _position = 0, int _len = 0, bool _isup = false)
 			: position(_position), len(_len), isup(_isup) {}
 	};
 	vector< vector<int> > src;
 	vector< vector<int> > sktline;
 
-	vector< nod *> tmp;
+	vector< node *> tmp;
 private:
 
 public:
@@ -1715,18 +1715,18 @@ public:
 class maxSearchSubTree {
 private:
 
-	nod *src_root;
+	node *src_root;
 	struct returnType {
 		int tree_size;
-		nod *head;
+		node *head;
 		int max_value;
 		int min_value;
-		returnType(int _tree_size = 0, nod *_head = nullptr, int _max_value = INT_MIN, int _min_value = INT_MAX) :
+		returnType(int _tree_size = 0, node *_head = nullptr, int _max_value = INT_MIN, int _min_value = INT_MAX) :
 			tree_size(_tree_size), head(_head), max_value(_max_value), min_value(_min_value) {}
 	};
 	returnType res;
 private:
-	returnType getMaxSearchSubTreeRec(nod *_head) {
+	returnType getMaxSearchSubTreeRec(node *_head) {
 		returnType res(0, nullptr, INT_MIN, INT_MAX);
 
 		if (_head == nullptr) 
@@ -1752,7 +1752,7 @@ private:
 				return (lchild.tree_size > rchild.tree_size ? lchild : rchild);
 		}
 	}
-	returnType comparator(nod *_head) {
+	returnType comparator(node *_head) {
 		return res;
 		if (_head == nullptr) {
 			return res;
@@ -1774,7 +1774,7 @@ private:
 		int p2 = rchildSubTressInfo.tree_size;
 		int maxSize = MAX(MAX(p1, p2), includeItSelf);
 
-		nod *maxHead = (p1 > p2 ? lchildSubTressInfo.head : rchildSubTressInfo.head);
+		node *maxHead = (p1 > p2 ? lchildSubTressInfo.head : rchildSubTressInfo.head);
 		if (maxSize == includeItSelf) {
 			maxHead = _head;
 		}
@@ -1786,15 +1786,15 @@ private:
 		return  res;
 	}
 public:
-	maxSearchSubTree(nod *_root = nullptr) : src_root(_root), res(0, nullptr, INT_MAX, INT_MIN) {}
+	maxSearchSubTree(node *_root = nullptr) : src_root(_root), res(0, nullptr, INT_MAX, INT_MIN) {}
 	void generateTree(void) {
-		queue<nod *>src;
-		nod *tmp = nullptr;
+		queue<node *>src;
+		node *tmp = nullptr;
 		int lvalue = 0, rvalue = 0, x = 0;
 
 		cout << "please enter root node value: ";
 		cin >> x;
-		src_root = new nod(x);
+		src_root = new node(x);
 		src.push(src_root);
 		while (!src.empty()) {
 			tmp = src.front();
@@ -1802,9 +1802,9 @@ public:
 			cout << "please enter " << tmp->value << "'s lvalue and rvalue: ";
 			cin >> lvalue >> rvalue;
 			if (lvalue != -1)
-				src.push(tmp->lchild = new nod(lvalue));
+				src.push(tmp->lchild = new node(lvalue));
 			if (rvalue != -1)
-				src.push(tmp->rchild = new nod(rvalue));
+				src.push(tmp->rchild = new node(rvalue));
 		}
 	}
 	int getMaxSearchSubTreeRec(void) {
@@ -1839,27 +1839,27 @@ public:
 //#25
 class LRU {
 private:
-	struct nod {
+	struct node {
 		string key;
 		int value;
-		nod(string _key, int _value) : key(_key), value(_value) {}
+		node(string _key, int _value) : key(_key), value(_value) {}
 	};
-	unordered_map<string, nod*> hash_map;
-	list<nod *> dual_list;
+	unordered_map<string, node*> hash_map;
+	list<node *> dual_list;
 	int catch_size;
 private:
-	void addNode2End(nod *_node) {
+	void addNode2End(node *_node) {
 		dual_list.push_back(_node);
 	}
-	void moveNode2End(nod *_node) {
-		nod *tmp = dual_list.front();
+	void moveNode2End(node *_node) {
+		node *tmp = dual_list.front();
 		dual_list.pop_front();
 		dual_list.push_back(tmp);
 	}
 public:
 	LRU(int _catch_size) : catch_size(_catch_size) {}
 	void set(string _key, int _value) {
-		nod *_node = new nod(_key, _value);
+		node *_node = new node(_key, _value);
 		if (get(_node->key) == INT_MIN && hash_map.size() < catch_size)
 		    addNode2End(_node);
 		else if (get(_node->key) != INT_MIN){
@@ -1966,19 +1966,19 @@ class bstTopoSBT {
 private:
 	vector<int> src_node;
 	vector<int> res_node;
-	nod *src_root;
-	nod *res_root;
+	node *src_root;
+	node *res_root;
 	struct returnData {
-		nod *head;
+		node *head;
 		int maxValue;
 		int minValue;
-		returnData(nod *_head = nullptr, int _maxValue = INT_MIN, int _minValue = INT_MAX) :
+		returnData(node *_head = nullptr, int _maxValue = INT_MIN, int _minValue = INT_MAX) :
 			head(_head), maxValue(_maxValue), minValue(_minValue) {}
 	};
 public:
 	bstTopoSBT(vector<int> _src_node) : src_node(_src_node), src_root(nullptr), res_root(nullptr) {}
-	bstTopoSBT(nod *_src_root = nullptr) : src_root(_src_root), res_root(nullptr) {}
-	returnData getBstTopoSBT(nod *_head) {
+	bstTopoSBT(node *_src_root = nullptr) : src_root(_src_root), res_root(nullptr) {}
+	returnData getBstTopoSBT(node *_head) {
 		returnData  tmp, l_data, r_data;
 
 		if (_head->lchild == nullptr && _head->rchild == nullptr) {
@@ -2014,7 +2014,7 @@ public:
 
 		return tmp;
 	}
-	nod *getBstTopoSBT(void) {
+	node *getBstTopoSBT(void) {
 		returnData tmp = getBstTopoSBT(src_root);
 		return tmp.head;
 	}
@@ -2042,10 +2042,10 @@ private:
 		int r_pos;
 		returnData(int _l_most_r = INT_MAX, int _r_most_l = INT_MIN) : l_pos(_l_most_r), r_pos(_r_most_l) {}
 	};
-	nod *src_root;
-	nod *res_root;
+	node *src_root;
+	node *res_root;
 private:
-	void nodesPosAdj(nod *_head, int _changes) {
+	void nodesPosAdj(node *_head, int _changes) {
 		if (_head == nullptr)
 			return;
 		if (_head->lchild)
@@ -2056,7 +2056,7 @@ private:
 		nodesPosAdj(_head->rchild, _changes);
 	}
 
-	returnData binaryPosAdj(nod *_root, nod *_head) {
+	returnData binaryPosAdj(node *_root, node *_head) {
 		int changes = 0;
 		returnData tmp, lchild_data, rchild_data;
 
@@ -2088,7 +2088,7 @@ private:
 		return tmp;
 	}
 
-	void refreshNodesPos(int _min_pos, nod *_head) {
+	void refreshNodesPos(int _min_pos, node *_head) {
 		if (_head == nullptr)
 			return;
 		_head->pos += _min_pos;
@@ -2098,7 +2098,7 @@ private:
 			refreshNodesPos(_min_pos, _head->rchild);
 	}
 
-	nod *preTraverse(nod *_head) {
+	node *preTraverse(node *_head) {
 		if (_head == nullptr)
 			return nullptr;
 		cout << _head->value << ' ';
@@ -2106,7 +2106,7 @@ private:
 		preTraverse(_head->rchild);
 	}
 
-	nod *midTraverse(nod *_head) {
+	node *midTraverse(node *_head) {
 		if (_head == nullptr)
 			return nullptr;
 		midTraverse(_head->lchild);
@@ -2114,7 +2114,7 @@ private:
 		midTraverse(_head->rchild);
 	}
 
-	nod *postTraverse(nod *_head) {
+	node *postTraverse(node *_head) {
 		if (_head == nullptr)
 			return nullptr;
 		postTraverse(_head->lchild);
@@ -2124,59 +2124,59 @@ private:
 public:
 	binaryTree() : src_root(nullptr), res_root(nullptr) {}
 
-	nod* generateFixedBinaryTree(void) {
-		queue<nod *> src;
-		nod *tmp = nullptr;
+	node* generateFixedBinaryTree(void) {
+		queue<node *> src;
+		node *tmp = nullptr;
 		int x = 0, lchild = 0, rchild = 0;
 
 		cout << "please enter root value: ";
 		cin >> x;
-		src.push(src_root = new nod(x));
+		src.push(src_root = new node(x));
 		while (!src.empty()) {
 			tmp = src.front();
 			src.pop();
 			cout << "please enter " << tmp->value << "'s lchild and rchild: ";
 			cin >> lchild >> rchild;
 			if (lchild != -1)
-				src.push(tmp->lchild = new nod(lchild));
+				src.push(tmp->lchild = new node(lchild));
 			if (rchild != -1)
-				src.push(tmp->rchild = new nod(rchild));
+				src.push(tmp->rchild = new node(rchild));
 		}
 		return src_root;
 	}
 
-	nod *generateFixedBinaryTree(vector<int> _src_nodes) {
-		nod *tmp = nullptr;
-		queue<nod *> x;
+	node *generateFixedBinaryTree(vector<int> _src_nodes) {
+		node *tmp = nullptr;
+		queue<node *> x;
 		int index = 0;
 		int min_pos = 0;
 
 		if (_src_nodes[0] == '#')
 			return nullptr;
-		x.push(src_root = new nod(_src_nodes[index++], 0));
+		x.push(src_root = new node(_src_nodes[index++], 0));
 		min_pos = src_root->pos;
 		while (!x.empty()) {
 			tmp = x.front();
 			x.pop();
 			if (_src_nodes[index] != '#')
-				x.push(tmp->lchild = new nod(_src_nodes[index], (tmp->pos - intlen(_src_nodes[index]) - 1)));
+				x.push(tmp->lchild = new node(_src_nodes[index], (tmp->pos - intlen(_src_nodes[index]) - 1)));
 			++index;
 			if (_src_nodes[index] != '#')
-				x.push(tmp->rchild = new nod(_src_nodes[index], (tmp->pos + (intlen(tmp->value) + 1))));
+				x.push(tmp->rchild = new node(_src_nodes[index], (tmp->pos + (intlen(tmp->value) + 1))));
 			++index;
 		}
 		return src_root;
 	}
 
-	nod *generateRandomBinaryTree(int _maxsize, int _maxvalue) {
-		nod *tmp = nullptr;
-		queue< nod * > src;
+	node *generateRandomBinaryTree(int _maxsize, int _maxvalue) {
+		node *tmp = nullptr;
+		queue< node * > src;
 		int nullvalue = (_maxvalue >> 1);
 		int value = 0;
 		int maxsize = (rand() % _maxsize);
 		int size = 0;
 
-		src_root = new nod(rand() % _maxvalue);
+		src_root = new node(rand() % _maxvalue);
 		if (src_root->value == nullvalue)
 			return nullptr;
 		++size;
@@ -2188,25 +2188,25 @@ public:
 				value = rand() % _maxvalue;
 				if (value != nullvalue) {//((value > (nullvalue - 10)) && (value > (nullvalue + 10))) {
 					++size;
-					src.push(tmp->lchild = new nod(value));
+					src.push(tmp->lchild = new node(value));
 				}
 				else
-					src.push(tmp->lchild = new nod('#'));
+					src.push(tmp->lchild = new node('#'));
 				value = rand() % _maxvalue;
 				if (value != nullvalue) {//((value > (nullvalue - 10)) && (value > (nullvalue + 10))) {
 					++size;
-					src.push(tmp->rchild = new nod(value));
+					src.push(tmp->rchild = new node(value));
 				}
 				else
-					src.push(tmp->rchild = new nod('#'));
+					src.push(tmp->rchild = new node('#'));
 			}
 		}
 		return src_root;
 	}
 
 	void binaryTreePrint(void) {
-		queue<nod *>src;
-		nod *tmp = nullptr;
+		queue<node *>src;
+		node *tmp = nullptr;
 		int level = 0;
 		int pre_num_pos = 0, pre_line_pos = 0, min_pos = 0, pre_len = 0, fill_len = 0;
 		vector<int> nodes_per_level(2, 0);  //level nodes;
@@ -2313,18 +2313,18 @@ nice!
 //#29
 class printTreeEdge {
 private:
-	nod *root = nullptr;
-	vector< vector<nod*> > res;
+	node *root = nullptr;
+	vector< vector<node*> > res;
 public:
-	printTreeEdge(nod *_root = nullptr) : root(_root) {}
+	printTreeEdge(node *_root = nullptr) : root(_root) {}
 	void getTreeEdge1(void) {
-		nod *tmp = nullptr;
-		queue<nod *> src;
+		node *tmp = nullptr;
+		queue<node *> src;
 		int level = 0;
 		vector<int> level_nodes(2, 0);
 		vector<int> last_level;
-		queue<nod*> front;
-		stack<nod*> back;
+		queue<node*> front;
+		stack<node*> back;
 
 		src.push(root);
 		level_nodes[level] = 1;
@@ -2411,14 +2411,14 @@ public:
 //#30  continue...
 class longestPathInTree {
 private:
-	nod *root;
-	nod *res;
+	node *root;
+	node *res;
 	struct returnData {
 		int sum;
 
 	};
 public:
-	longestPathInTree(nod *_root = nullptr) : root(_root), res(nullptr) {}
+	longestPathInTree(node *_root = nullptr) : root(_root), res(nullptr) {}
 	void getLongestPath(void) {
 
 	}
@@ -2434,7 +2434,7 @@ public:
 //#31
 class zigzagPrint {
 private:
-	nod *root;
+	node *root;
 	vector< vector<int> > src;
 private:
 	void intuitionPrint(vector< vector<int> > _tmp, int _index) {
@@ -2446,10 +2446,10 @@ private:
 			cout << _tmp[_index][index] << ' ';
 	}
 public:
-	zigzagPrint(nod *_root = nullptr) : root(_root) {}
+	zigzagPrint(node *_root = nullptr) : root(_root) {}
 	void print(void) {
-		nod *tmp = nullptr;
-		queue<nod *> que;
+		node *tmp = nullptr;
+		queue<node *> que;
 		int level = 0;
 		vector< int > node_per_level(2);
 		
@@ -2488,9 +2488,9 @@ public:
 		}
 	}
 	void printOPT(void) {
-		queue<nod*> src;
-		nod *tmp = nullptr;
-		vector<nod*> print;
+		queue<node*> src;
+		node *tmp = nullptr;
+		vector<node*> print;
 		vector<int> level_nodes(2, 0);
 		int level = 0;
 
@@ -2558,15 +2558,15 @@ public:
 //#32
 class modifySearchTree {
 private:
-	nod *src_root;
-	nod *res_root;
+	node *src_root;
+	node *res_root;
 	vector<int> src;
 	binaryTree res_tree;
 public:
-	modifySearchTree(nod *_src_root = nullptr) : src_root(_src_root), res_root(nullptr) {}
-	vector<nod*> getChanges(void) {
-		nod *cur = src_root, *most_right = nullptr, *tmp = new nod(INT_MIN);
-		vector< vector<nod*> > res(1);
+	modifySearchTree(node *_src_root = nullptr) : src_root(_src_root), res_root(nullptr) {}
+	vector<node*> getChanges(void) {
+		node *cur = src_root, *most_right = nullptr, *tmp = new node(INT_MIN);
+		vector< vector<node*> > res(1);
 		size_t index_res = 0;
 
 		while (cur != nullptr) {
@@ -2631,19 +2631,19 @@ public:
 //#33  
 class compareTopoTree {
 private:
-	nod *src_root1;
-	nod *src_root2;
+	node *src_root1;
+	node *src_root2;
 private:
-	bool check(nod *_node, nod *_root) {
+	bool check(node *_node, node *_root) {
 		if (_root == nullptr)
 			return true;
 		if ((_node == nullptr && _root != nullptr) || _node->value != _root->value)
 			return false;
 		return check(_node->lchild, _root->lchild) && check(_node->rchild, _root->rchild);
 	}
-	nod *find(nod *_head) {
-		queue<nod*> que;
-		nod *tmp = nullptr;
+	node *find(node *_head) {
+		queue<node*> que;
+		node *tmp = nullptr;
 
 		que.push(_head);
 		while (!que.empty()) {
@@ -2658,11 +2658,11 @@ private:
 		}
 	}
 public:
-	compareTopoTree(nod *_src_root1 = nullptr, nod *_src_root2 = nullptr) :
+	compareTopoTree(node *_src_root1 = nullptr, node *_src_root2 = nullptr) :
 		src_root1(_src_root1), src_root2(_src_root2) {}
 	bool getResult(void) {
-		queue<nod*> que;
-		nod *find_res = nullptr, *tmp = nullptr;
+		queue<node*> que;
+		node *find_res = nullptr, *tmp = nullptr;
 
 		que.push(src_root1);
 		while (!que.empty()) {
@@ -2719,12 +2719,12 @@ public:
 //#34
 class compareTopoSubTree {
 private:
-	nod *src_root;
-	nod *cmp_root;
+	node *src_root;
+	node *cmp_root;
 	string src_serial;
 	string cmp_serial;
 private:
-	string preSerial(nod *_head) {
+	string preSerial(node *_head) {
 		if (_head == nullptr)
 			return "#!";
 		string res;
@@ -2742,7 +2742,7 @@ private:
 		return res;
 	}
 public:
-	compareTopoSubTree(nod *_src_root = nullptr, nod *_cmp_root = nullptr) :
+	compareTopoSubTree(node *_src_root = nullptr, node *_cmp_root = nullptr) :
 		src_root(_src_root), cmp_root(_cmp_root) {}
 	bool getResult(void) {
 		src_serial = preSerial(src_root);
@@ -2803,16 +2803,16 @@ public:
 //#35
 class isBlanceTree {
 private:
-	nod *root;
+	node *root;
 private:
-	int getHeight(nod *_head) {
+	int getHeight(node *_head) {
 		if (_head == nullptr)
 			return 0;
 		getHeight(_head->lchild);
 		getHeight(_head->rchild);
 	}
 public:
-	isBlanceTree(nod *_root = nullptr) : root(_root) {}
+	isBlanceTree(node *_root = nullptr) : root(_root) {}
 	bool getResult(void) {
 		int l_height, r_height = 0;
 		if(root->lchild)
@@ -3059,12 +3059,12 @@ public:
 //##
 class myTest {
 private:
-	nod *root;
-	vector<nod *>src;
+	node *root;
+	vector<node *>src;
 public:
-	myTest(nod *_root = nullptr) : root(_root) {}
+	myTest(node *_root = nullptr) : root(_root) {}
 	void morriss(void) {
-		nod *cur = root, *most_right = nullptr;
+		node *cur = root, *most_right = nullptr;
 		while (cur != nullptr) {
 			src.push_back(cur);
 			if (cur->lchild != nullptr) {
@@ -3083,7 +3083,7 @@ public:
 		}
 	}
 	void preTraverse(void) {
-		nod *cur = root, *most_right = nullptr;
+		node *cur = root, *most_right = nullptr;
 		while (cur != nullptr) {
 			if (cur->lchild != nullptr) {
 				most_right = cur->lchild;
@@ -3105,7 +3105,7 @@ public:
 		}
 	}
 	void midTraverse(void) {
-		nod *cur = root, *most_right = nullptr;
+		node *cur = root, *most_right = nullptr;
 		while (cur != nullptr) {
 			if (cur->lchild != nullptr) {
 				most_right = cur->lchild;
@@ -3127,7 +3127,7 @@ public:
 		}
 	}
 	void postTraverse(void) {
-		nod *cur = root, *most_right = nullptr;
+		node *cur = root, *most_right = nullptr;
 		while (cur != nullptr) {
 			if (cur->lchild != nullptr) {
 				most_right = cur->lchild;
