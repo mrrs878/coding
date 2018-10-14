@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 #include <string>
 #include <stack>
 #include <queue>
@@ -24,14 +25,14 @@ int intlen(int _x) {
 	return len;         
 }                       
 string int2str(int _x) {
-	string tmp, res;    
+	string tmp, board;    
 	do {                
 		tmp.push_back((_x % 10) + '0');
 		_x /= 10;       
 	} while (_x != 0);  
 	for (size_t index = tmp.size() - 1; index != -1; --index)
-		res.push_back(tmp[index]);
-	return res;         
+		board.push_back(tmp[index]);
+	return board;         
 }
 
 void stackPrint(stack<int> &_tmp) {
@@ -635,16 +636,16 @@ public:
 		return getFibonacciNN(n);
 	}
 	int getFibonacciN(void) {
-		int res = 1, tmp = 0, pre = 1;
+		int board = 1, tmp = 0, pre = 1;
 
 		if (n == 1 || n == 2)
 			return 1;
 		for (int i = 3; i <= n; ++i) {
-			tmp = res;
-			res += pre;
+			tmp = board;
+			board += pre;
 			pre = tmp;
 		}
-		return res;
+		return board;
 	}
 /****************************test code****************************/
 /*
@@ -683,34 +684,34 @@ private:
 	int sum;
 private:
 	int getExchangeNumRec(int _index, int _remain) {
-		int res = 0;
+		int board = 0;
 		set<int> tmp;
 
 		if (_index == arr.size())
-			res = (_remain == 0 ? 1 : 0);
+			board = (_remain == 0 ? 1 : 0);
 		else{
 			for (int i = 0; arr[_index] * i <= _remain; ++i)
-				res += getExchangeNumRec(_index + 1, _remain - arr[_index] * i);
+				board += getExchangeNumRec(_index + 1, _remain - arr[_index] * i);
 		}
-		return res;
+		return board;
 	}
 	int getMinExchangeRes(int _index, int _remain, set<int> &x) {
-		int res = 0;
+		int board = 0;
 		int tmp = 0;
 		int step = 0;
 
 		if (_index == arr.size())
-			res = (_remain == 0 ? 1 : 0);
+			board = (_remain == 0 ? 1 : 0);
 		else {
 			for (int i = 0; arr[_index] * i <= _remain; ++i) {
 				tmp = getMinExchangeRes(_index + 1, _remain - arr[_index] * i, x);
 				if (tmp != 0) {
 					x.insert(tmp);
-					res += tmp;
+					board += tmp;
 				}
 			}
 		}
-		return res;
+		return board;
 	}
 public:
 	minCoins(vector<int> _arr, int _sum = 0) : arr(_arr), sum(_sum) {}
@@ -1008,7 +1009,7 @@ private:
 		if (_begin == _end)
 			return _tmp[_begin];
 		int pivot = medianOfMedians(_tmp, _begin, _end);
-		vector<int> pivot_range = partition(_tmp, _begin, _end, pivot);
+		vector<int> pivot_range = partition_class(_tmp, _begin, _end, pivot);
 		if ((_i >= pivot_range[0]) && (_i <= pivot_range[1]))  // k == _i
 			return _tmp[_i];
 		else if (_i < pivot_range[0])
@@ -1018,8 +1019,8 @@ private:
 
 		return 0;
 	}
-	vector<int> partition(vector<int> &_tmp, size_t _begin, size_t _end, int _pivotvalue) {
-		vector<int> res(2);
+	vector<int> partition_class(vector<int> &_tmp, size_t _begin, size_t _end, int _pivotvalue) {
+		vector<int> board(2);
 		int small = _begin - 1;
 		int cur = _begin;
 		int big = _end + 1;
@@ -1031,22 +1032,22 @@ private:
 			else
 				++cur;
 		}
-		res[0] = small + 1;
-		res[1] = big - 1;
+		board[0] = small + 1;
+		board[1] = big - 1;
 
-		return res;
+		return board;
 	}
 	int medianOfMedians(vector<int> &_tmp, size_t _begin, size_t _end) {
 		int num = _end - _begin + 1;
 		int offset = (num % 5 == 0 ? 0 : 1);
-		vector<int> res(num / 5 + offset, 0);
-		for (size_t i = 0; i < res.size(); ++i) {
+		vector<int> board(num / 5 + offset, 0);
+		for (size_t i = 0; i < board.size(); ++i) {
 			int beginI = _begin + i * 5;
 			int endI = beginI + 4;
-			res[i] = getMedian(_tmp, beginI, MIN(_end, endI));
+			board[i] = getMedian(_tmp, beginI, MIN(_end, endI));
 		}
 
-		return select(res, 0, res.size() - 1, res.size() / 2);
+		return select(board, 0, board.size() - 1, board.size() / 2);
 	}
 	int getMedian(vector<int> &_tmp, size_t _begin, size_t _end) {
 		insertionSort(_tmp, _begin, _end);
@@ -1084,19 +1085,19 @@ public:
 		if ((k < 1) || (k > src.size()))
 			return src;
 		vector<int> tmp = src;
-		vector<int> res(k, 0);
+		vector<int> board(k, 0);
 		int index = 0;
 
 		int minKth = select(tmp, 0, tmp.size() - 1, k - 1);
 
 		for (int i = 0; i != src.size(); ++i) {
 			if (src[i] < minKth)
-				res[index++] = src[i];
+				board[index++] = src[i];
 		}
-		for (; index != res.size(); ++index)
-			res[index] = minKth;
+		for (; index != board.size(); ++index)
+			board[index] = minKth;
 
-		return res;
+		return board;
 	}
 /****************************test code****************************/
 /*
@@ -1123,9 +1124,9 @@ class subArrs {
 private:
 	vector<int> src;
 	int aim;
-	int res;
+	int board;
 public:
-	subArrs(vector<int> _src, int _aim = 0) : src(_src), aim(_aim), res(0) {}
+	subArrs(vector<int> _src, int _aim = 0) : src(_src), aim(_aim), board(0) {}
 	int getSubArrs(void) {
 		list<size_t> max_list, min_list;
 		size_t index_l = 0, index_r = 0;
@@ -1145,10 +1146,10 @@ public:
 				min_list.pop_front();
 			if (max_list.front() == index_l)
 				max_list.pop_front();
-			res += (index_r - index_l);
+			board += (index_r - index_l);
 			++index_l;
 		}
-		return res;
+		return board;
 	}
 /****************************test code****************************/
 /*
@@ -1208,7 +1209,7 @@ public:
 	maxTree(vector<int> _src) : src(_src) {}
 	void generateMaxTree(void) {
 		stack<size_t> m;
-		vector<x> res;
+		vector<x> board;
 		x tmp_res;
 
 		/* get lchild and rchila */
@@ -1220,7 +1221,7 @@ public:
 				tmp_res.rchild_ss = i;
 				m.pop();
 				tmp_res.lchild_ss = (m.empty() ? -1 : m.top());
-				res.push_back(tmp_res);
+				board.push_back(tmp_res);
 				m.push(i);
 			}
 		}
@@ -1229,7 +1230,7 @@ public:
 			tmp_res.rchild_ss = -1;
 			m.pop();
 			tmp_res.lchild_ss = (m.empty() ? -1 : m.top());
-			res.push_back(tmp_res);
+			board.push_back(tmp_res);
 		}
 
 		/* generate binary tree */
@@ -1237,18 +1238,18 @@ public:
 		for (size_t i = 0; i < src.size(); ++i)
 			tree.push_back(*(new node(i)));
 		for (size_t i = 0; i < src.size(); ++i) {
-			if (res[i].lchild_ss != -1 && res[i].rchild_ss != -1) {
-				if (src[res[i].lchild_ss] < src[res[i].rchild_ss])
-					addNode(&tree[res[i].lchild_ss], &(tree[res[i].cur_ss]));
+			if (board[i].lchild_ss != -1 && board[i].rchild_ss != -1) {
+				if (src[board[i].lchild_ss] < src[board[i].rchild_ss])
+					addNode(&tree[board[i].lchild_ss], &(tree[board[i].cur_ss]));
 				else
-					addNode(&tree[res[i].rchild_ss], &(tree[res[i].cur_ss]));
+					addNode(&tree[board[i].rchild_ss], &(tree[board[i].cur_ss]));
 			}
-			else if(res[i].lchild_ss == -1 && res[i].rchild_ss != -1)
-				addNode(&tree[res[i].rchild_ss], &(tree[res[i].cur_ss]));
-			else if(res[i].lchild_ss != -1 && res[i].rchild_ss == -1)
-				addNode(&tree[res[i].lchild_ss], &(tree[res[i].cur_ss]));
+			else if(board[i].lchild_ss == -1 && board[i].rchild_ss != -1)
+				addNode(&tree[board[i].rchild_ss], &(tree[board[i].cur_ss]));
+			else if(board[i].lchild_ss != -1 && board[i].rchild_ss == -1)
+				addNode(&tree[board[i].lchild_ss], &(tree[board[i].cur_ss]));
 		}
-		src_root = tree[res.back().cur_ss];
+		src_root = tree[board.back().cur_ss];
 
 		levelTraverse();  //traverse tree by level
 	}
@@ -1724,13 +1725,13 @@ private:
 		returnType(int _tree_size = 0, node *_head = nullptr, int _max_value = INT_MIN, int _min_value = INT_MAX) :
 			tree_size(_tree_size), head(_head), max_value(_max_value), min_value(_min_value) {}
 	};
-	returnType res;
+	returnType board;
 private:
 	returnType getMaxSearchSubTreeRec(node *_head) {
-		returnType res(0, nullptr, INT_MIN, INT_MAX);
+		returnType board(0, nullptr, INT_MIN, INT_MAX);
 
 		if (_head == nullptr) 
-			return res;
+			return board;
 		else {
 			returnType lchild;
 			returnType rchild;
@@ -1742,20 +1743,20 @@ private:
 				rchild.head == _head->rchild &&
 				_head->value > lchild.max_value &&
 				_head->value < rchild.min_value) {
-				res.tree_size = lchild.tree_size + 1 + rchild.tree_size;
-				res.head = _head;
-				res.max_value = MAX(_head->value, lchild.max_value);
-				res.min_value = MIN(_head->value, rchild.min_value);
-				return res;
+				board.tree_size = lchild.tree_size + 1 + rchild.tree_size;
+				board.head = _head;
+				board.max_value = MAX(_head->value, lchild.max_value);
+				board.min_value = MIN(_head->value, rchild.min_value);
+				return board;
 			}
 			else  //max(lchild.size, rchild.size)
 				return (lchild.tree_size > rchild.tree_size ? lchild : rchild);
 		}
 	}
 	returnType comparator(node *_head) {
-		return res;
+		return board;
 		if (_head == nullptr) {
-			return res;
+			return board;
 		}
 		//node *lchild = _head->lchild;
 		returnType lchildSubTressInfo = comparator(_head->lchild);
@@ -1779,14 +1780,14 @@ private:
 			maxHead = _head;
 		}
 
-		res.head = maxHead;
-		res.tree_size = maxSize;
-		res.min_value = MIN(MAX(lchildSubTressInfo.min_value, rchildSubTressInfo.min_value), _head->value);
-		res.max_value = MAX(MAX(lchildSubTressInfo.max_value, rchildSubTressInfo.max_value), _head->value);
-		return  res;
+		board.head = maxHead;
+		board.tree_size = maxSize;
+		board.min_value = MIN(MAX(lchildSubTressInfo.min_value, rchildSubTressInfo.min_value), _head->value);
+		board.max_value = MAX(MAX(lchildSubTressInfo.max_value, rchildSubTressInfo.max_value), _head->value);
+		return  board;
 	}
 public:
-	maxSearchSubTree(node *_root = nullptr) : src_root(_root), res(0, nullptr, INT_MAX, INT_MIN) {}
+	maxSearchSubTree(node *_root = nullptr) : src_root(_root), board(0, nullptr, INT_MAX, INT_MIN) {}
 	void generateTree(void) {
 		queue<node *>src;
 		node *tmp = nullptr;
@@ -1808,15 +1809,15 @@ public:
 		}
 	}
 	int getMaxSearchSubTreeRec(void) {
-		res = getMaxSearchSubTreeRec(src_root);
+		board = getMaxSearchSubTreeRec(src_root);
 
-		return res.tree_size;
+		return board.tree_size;
 	}
 	int comparator(void) {
-		returnType res;
-		res = comparator();
+		returnType board;
+		board = comparator();
 
-		return res.tree_size;
+		return board.tree_size;
 	}
 /****************************test code****************************/
 /*
@@ -2314,7 +2315,7 @@ nice!
 class printTreeEdge {
 private:
 	node *root = nullptr;
-	vector< vector<node*> > res;
+	vector< vector<node*> > board;
 public:
 	printTreeEdge(node *_root = nullptr) : root(_root) {}
 	void getTreeEdge1(void) {
@@ -2412,13 +2413,13 @@ public:
 class longestPathInTree {
 private:
 	node *root;
-	node *res;
+	node *board;
 	struct returnData {
 		int sum;
 
 	};
 public:
-	longestPathInTree(node *_root = nullptr) : root(_root), res(nullptr) {}
+	longestPathInTree(node *_root = nullptr) : root(_root), board(nullptr) {}
 	void getLongestPath(void) {
 
 	}
@@ -2566,7 +2567,7 @@ public:
 	modifySearchTree(node *_src_root = nullptr) : src_root(_src_root), res_root(nullptr) {}
 	vector<node*> getChanges(void) {
 		node *cur = src_root, *most_right = nullptr, *tmp = new node(INT_MIN);
-		vector< vector<node*> > res(1);
+		vector< vector<node*> > board(1);
 		size_t index_res = 0;
 
 		while (cur != nullptr) {
@@ -2583,9 +2584,9 @@ public:
 					most_right->rchild = nullptr;
 					src.push_back(cur->value);
 					if (tmp->value > cur->value) {
-						res[index_res].push_back(tmp);
-						res[index_res++].push_back(cur);
-						res.push_back({});
+						board[index_res].push_back(tmp);
+						board[index_res++].push_back(cur);
+						board.push_back({});
 					}
 					tmp = cur;
 				}
@@ -2593,9 +2594,9 @@ public:
 			else {
 				src.push_back(cur->value);
 				if (tmp->value > cur->value) {
-					res[index_res].push_back(tmp);
-					res[index_res++].push_back(cur);
-					res.push_back({});
+					board[index_res].push_back(tmp);
+					board[index_res++].push_back(cur);
+					board.push_back({});
 				}
 				tmp = cur;
 			}
@@ -2603,7 +2604,7 @@ public:
 		}
 		tmp = nullptr;
 		delete(tmp);
-		return{ res[0][0] , res[res.size() - 2][1] };
+		return{ board[0][0] , board[board.size() - 2][1] };
 	}
 /****************************test code****************************/
 /*
@@ -2727,19 +2728,19 @@ private:
 	string preSerial(node *_head) {
 		if (_head == nullptr)
 			return "#!";
-		string res;
-		res.push_back(_head->value + '0');
-		res += '!';
-		res += preSerial(_head->lchild);
-		res += preSerial(_head->rchild);
-		return res;
+		string board;
+		board.push_back(_head->value + '0');
+		board += '!';
+		board += preSerial(_head->lchild);
+		board += preSerial(_head->rchild);
+		return board;
 	}
 	vector<int> getNextArray(const string _tmp) {
 
 	}
 	int getIndefOf(const string &_src, const string &_cmp) {
-		size_t res = _src.find(_cmp);
-		return res;
+		size_t board = _src.find(_cmp);
+		return board;
 	}
 public:
 	compareTopoSubTree(node *_src_root = nullptr, node *_cmp_root = nullptr) :
@@ -2836,24 +2837,24 @@ public:
 class unicode {
 private:
 	string src;
-	unordered_map<char, int> res;
+	unordered_map<char, int> board;
 public:
 	unicode(const string &_src) : src(_src) {}
 	string getResult(void) {
 		char tmp = src[0];
 		int cnt = 0;
-		string res;
+		string board;
 
 		for (size_t index = 0; index < src.size(); ) {
 			while (tmp == src[index++])
 				++cnt;
-			res.push_back(cnt + '0');
-			res.push_back(tmp);
+			board.push_back(cnt + '0');
+			board.push_back(tmp);
 			cnt = 0;
 			tmp = src[--index];
 		}
 
-		return res;
+		return board;
 	}
 };
 //#37
@@ -3053,8 +3054,121 @@ public:
 /*****************************end test****************************/
 };
 //#42
+class quickSort {
+private:
+	vector<int> src;
+	vector<int> board;
+public:
+	quickSort(const vector<int>& _src) : src(_src) { board.push_back(0); board.push_back(1); }
+	~quickSort(void) {}
+	void sort(void) {
+		sort(0, src.size() - 1);
+		vectorPrint<int>(src);
+	}
+	void sort(int _left, int _right) {
+		if (_left < _right) {
+			swap(src[_right], src[rand() % (_right - _left) + _left]);
+			partition(_left, _right);
+			sort(_left, board[0] - 1);
+			sort(board[1] + 1, _right);
+		}
+	}
+	void partition(int _left, int _right) {
+		int less = _left - 1;
+		int more = _right;
+		int cur = _left;
+
+		while (cur < more) {
+			if (src[cur] < src[_right])
+				swap(src[cur++], src[++less]);
+			else if (src[cur] > src[_right])
+				swap(src[--more], src[cur]);
+			else
+				++cur;
+		}
+		swap(src[more], src[_right]);
+
+		board[0] = less + 1;
+		board[1] = more;
+	}
+/****************************test code****************************/
+/*
+	vector<int> src = generateRandomArray(200, 400);
+	//vector<int> src = {8, 7, 6, 1, 5, 4, 3};
+	cout << src.size() << endl;
+	quickSort x(src);
+	x.sort();
+****debug: 41
+		   27 27 64 67 67 81 91 100 105 118 124 126 145 153 158 162 
+		   195 204 211 221 235 236 247 269 278 292 294 295 299 302 
+		   303 312 316 334 338 342 361 369 371 382 391
+		   nice!
+*/
+/*****************************end test****************************/
+};
+//#43
+class heapSort {
+private:
+	vector<int> src;
+public:
+	vector<int> heap;
+private:
+	void heapInsert(int _index, int _value) {
+		heap.push_back(_value);
+		while (heap[_index] > heap[(_index - 1) / 2]) {
+			swap(heap[_index], heap[(_index - 1) / 2]);
+			_index = ((_index - 1) / 2);
+		}
+	}
+	void heapify(size_t _index, size_t _size) {
+		size_t left = (_index << 1) + 1;
+		size_t max = _index;
+
+		while (left < _size) {
+			max = (((left + 1 < _size) && (heap[left] < heap[left + 1])) ? (left + 1) : left);
+			if (heap[_index] > heap[max])
+				break;
+			swap(heap[max], heap[_index]);
+			_index = max;
+			left = ((max << 1) + 1);
+		}
+	}
+public:
+	heapSort(const vector<int> &_src) : src(_src) {}
+	~heapSort(void) {}
+	void sort(void) {
+		for (size_t index = 0; index < src.size(); ++index)
+			heapInsert(index, src[index]);
+
+		for (size_t index = 1; index < src.size(); ++index) {
+			swap(heap[0], heap[heap.size() - index]);
+			heapify(0, src.size() - index);
+		}
+		//vectorPrint<int>(heap);
+	}
 
 
+
+
+/****************************test code****************************/
+/*
+	srand(time(0));
+	for (int time = 0; time < 60000; ++time) {
+		vector<int> src = generateRandomArray(200, 400);
+		heapSort x(src);
+
+		x.sort();
+		sort(src.begin(), src.end());
+		if (src != x.heap) {
+			vectorPrint<int>(src);
+			succeed = false;
+			break;
+		}
+	}
+****debug: nice!
+*/
+/*****************************end test****************************/
+};
 
 //##
 class myTest {
@@ -3190,7 +3304,7 @@ int main(void)
 	//x.binaryTreePrint();
 	//node *root3 = x.generateFixedBinaryTree(src3);
 	//x.binaryTreePrint();
-
+	//vector<int> src = { 6, 5, 4, 3, 2, 1 };
 	
 
 
