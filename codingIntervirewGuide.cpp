@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <algorithm>
 
+
 using namespace std;
 
 #define MIN(x, y)      ((x) < (y) ? (x) : (y))
@@ -3169,6 +3170,146 @@ public:
 */
 /*****************************end test****************************/
 };
+//#44
+class repeatNumInArray {
+private:
+	vector<int> src;
+private:
+	int getCount(size_t _left, size_t _right) {
+		int cnt = 0;
+
+		for (size_t index = _left; index < src.size() - 1; ++index) {
+			if ((src[index] >= _left) && (src[index] <= _right))
+				++cnt;
+		}
+		return cnt;
+	}
+public:
+	repeatNumInArray(const vector<int> _src) : src(_src) {}
+	void getRepeat1(void) {
+		sort(src.begin(), src.end());
+		int bkp = src[0];
+		for (size_t index = 1; index < src.size(); ++index) {
+			if (bkp == src[index])
+				break;
+			else
+				bkp = src[index];
+		}
+		cout << "repaet num: " << bkp << endl;
+	}
+
+	void getRepeat2(void) {
+		unordered_map<int, int> tmp;
+
+		for (size_t index = 0; index < src.size(); ++index) {
+			if (tmp.count(src[index])) {  //warnning::tmp[src[index]]»á×Ô¶¯insert(src[index], 0)
+				cout << "repaet num: " << src[index] << endl;
+				break;
+			}
+			else
+				tmp.insert(make_pair(src[index], 1));
+		}
+	}
+
+	void getRepeat3(void) {
+		for (size_t index = 0; index < src.size();) {
+			if (src[index] == index)
+				++index;
+			else {
+				if (src[index] == src[src[index]]) {
+					cout << "repaet num: " << src[index] << endl;
+					return;
+				}
+				else
+					swap(src[index], src[src[index]]);
+			}
+		}
+	}
+
+	void getRepeat4(void) {
+		int left = 0, right = src.size() - 1;
+
+		while (left < right) {
+			int mid = ((right - left) >> 1) + left;
+			int cnt = getCount(left, mid);
+
+			if (left == right) {
+				if (cnt > 1)
+					cout << "repaet num: " << src[left] << endl;
+				else 
+					break;
+			}
+
+			if (cnt > (mid - left + 1))
+				right = mid;
+			else
+				left = mid + 1;
+		}
+		cout << "none\n";
+	}
+
+
+
+/****************************test code****************************/
+/*
+	vector<int> src = { 2, 3, 1, 0, 2, 5, 3 };
+	repeatNumInArray x(src);
+
+	//x.getRepeat1();
+	x.getRepeat2();
+	//x.getRepeat3();
+	x.getRepeat4();
+****debug:  vector<int> src = { 2, 3, 1, 0, 2, 5, 3 };
+			repeatNumInArray x(src);
+
+			x.getRepeat1();
+			x.getRepeat2();
+			x.getRepeat3();
+*/
+/*****************************end test****************************/
+};
+//#45
+class findInMatrix {
+private:
+	vector< vector<int> > src;
+	int num;
+
+public:
+	findInMatrix(const vector< vector<int> > &_src, int _num) : src(_src), num(_num) {}
+	~findInMatrix(void) {}
+	void find(void) {
+		size_t row = 0, col = (src[0].size() - 1);
+
+		while ((row < src.size()) && (col >= 0)) {
+			if (src[row][col] == num) {
+				cout << "find " << num << "(" << row << "," << col << ")\n";
+				break;
+			}
+			else if (src[row][col] < num)
+				++row;
+			else
+				--col;
+		}
+	}
+
+
+
+/****************************test code****************************/
+/*
+	vector< vector<int> > src = { {1, 2, 8,  9},
+								  {2, 4, 9,  12},
+								  {4, 7, 10, 13},
+								  {6, 8, 11, 15},
+								  {3, 6, 4,  18} };
+	findInMatrix x(src, 8);
+	x.find();
+****debug:  find 10(2,2)
+			nice
+*/
+/*****************************end test****************************/
+};
+
+
 
 //##
 class myTest {
@@ -3304,8 +3445,10 @@ int main(void)
 	//x.binaryTreePrint();
 	//node *root3 = x.generateFixedBinaryTree(src3);
 	//x.binaryTreePrint();
-	//vector<int> src = { 6, 5, 4, 3, 2, 1 };
 	
+	
+
+
 
 
 
