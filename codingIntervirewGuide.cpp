@@ -36,7 +36,7 @@ string int2str(int _x) {
 	return board;         
 }
 
-void stackPrint(stack<int> &_tmp) {
+void stackPrint(const stack<int> &_tmp) {
 	while (!_tmp.empty()) {
 		cout << _tmp.top() << ' ';
 		_tmp.pop();
@@ -44,13 +44,13 @@ void stackPrint(stack<int> &_tmp) {
 }
 
 template<class type>
-void vectorPrint(vector<type> &_tmp) {
+void vectorPrint(const vector<type> &_tmp) {
 	for (vector<type>::iterator iter = _tmp.begin(); iter != _tmp.end(); ++iter)
 		cout << *iter << ' ';
 	cout << endl;
 }
 
-void listPrint(list<int> &_tmp) {
+void listPrint(const list<int> &_tmp) {
 	for (list<int>::iterator iter = _tmp.begin(); iter != _tmp.end(); ++iter)
 		cout << (*iter) << ' ';
 	cout << endl;
@@ -399,8 +399,8 @@ private:
 		}
 	}
 public:
-	trieTree() {}
-	~trieTree() { clearNode(&src_root); }
+	trieTree(void) {}
+	~trieTree(void) { clearNode(&src_root); }
 	void insertStr(const string &_str) {
 		size_t i = 0;
 		int index = 0;
@@ -532,7 +532,7 @@ private:
 		return tmp;
 	}
 public:
-	minPath(int(*_src)[4] = nullptr, int _row = 0, int _col = 0) 
+	minPath(const int(*_src)[4] = nullptr, int _row = 0, int _col = 0) 
 		: src(_src), row(_row), col(_col), path(0) {}
 	int getMinPathRec(void) {
 		return getMinPathRec(src, 0, 0);
@@ -3308,7 +3308,82 @@ public:
 */
 /*****************************end test****************************/
 };
+//#46
+class replaySpace{
+private:
+	char *src;
+	int size;
 
+public:
+	replaySpace(char *_src = nullptr, int _size = 0) : src(_src), size(_size) {}
+	~replaySpace(void) {}
+	void replay(void) {
+		int space_cnt = 0;
+		for (size_t i = 0; i < size; ++i) {
+			if (src[i] == ' ')
+				++space_cnt;
+		}
+		char *p_old = src + size;
+		size += (space_cnt << 1);
+		src = (char*)realloc(src, size );
+		char *p_new = src + size;
+
+		while (p_new != p_old) {
+			if (*p_old != ' ')
+				*p_new-- = *p_old;
+			else {
+				*p_new-- = '0';
+				*p_new-- = '2';
+				*p_new-- = '%';
+			}
+			--p_old;
+		}
+	cout << src << endl;
+	}
+	
+	
+	
+	
+/****************************test code****************************/
+/*
+	char *src = (char*)malloc(sizeof("nihaoa hello world aaa aaa aaa"));
+	memcpy(src, "nihaoa hello world aaa aaa aaa", sizeof("nihaoa hello world aaa aaa aaa"));
+	replaySpace x(src, strlen(src));
+	cout << src << endl;
+	x.replay();
+****debug:  nihaoa hello world aaa aaa aaa
+			nihaoa%20hello%20world%20aaa%20aaa%20aaa
+			nice!
+*/
+/*****************************end test****************************/
+};
+//#47
+class mergeArray{
+private:
+	vector<int> dst;
+	vector<int> src;
+public:
+	mergeArray(const vector<int> &_src, const vector<int> &_dst) : src(_src), dst(_dst) {}
+	~mergeArray(void) {}
+	void merge(void) {
+		for (vector<int>::iterator iter = src.begin(); iter != src.end(); ++iter)
+			dst.push_back(*iter);
+		sort(dst.begin(), dst.end());
+		vectorPrint<int>(dst);
+	}
+	
+	
+	
+/****************************test code****************************/
+/*
+	vector<int> dst = { 2, 4, 6, 8, 10 };
+	vector<int> src = { 1, 3, 5, 7, 9 };
+	mergeArray x(src, dst);
+	x.merge();
+****debug:  1 2 3 4 5 6 7 8 9 10 
+*/ 
+/*****************************end test****************************/
+};
 
 
 //##
@@ -3445,7 +3520,6 @@ int main(void)
 	//x.binaryTreePrint();
 	//node *root3 = x.generateFixedBinaryTree(src3);
 	//x.binaryTreePrint();
-	
 	
 
 
