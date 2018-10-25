@@ -36,7 +36,7 @@ string int2str(int _x) {
 	return board;         
 }
 
-void stackPrint(const stack<int> &_tmp) {
+void stackPrint(stack<int> &_tmp) {
 	while (!_tmp.empty()) {
 		cout << _tmp.top() << ' ';
 		_tmp.pop();
@@ -44,13 +44,13 @@ void stackPrint(const stack<int> &_tmp) {
 }
 
 template<class type>
-void vectorPrint(const vector<type> &_tmp) {
+void vectorPrint(vector<type> &_tmp) {
 	for (vector<type>::iterator iter = _tmp.begin(); iter != _tmp.end(); ++iter)
 		cout << *iter << ' ';
 	cout << endl;
 }
 
-void listPrint(const list<int> &_tmp) {
+void listPrint(list<int> &_tmp) {
 	for (list<int>::iterator iter = _tmp.begin(); iter != _tmp.end(); ++iter)
 		cout << (*iter) << ' ';
 	cout << endl;
@@ -532,7 +532,7 @@ private:
 		return tmp;
 	}
 public:
-	minPath(const int(*_src)[4] = nullptr, int _row = 0, int _col = 0) 
+	minPath(int(*_src)[4] = nullptr, int _row = 0, int _col = 0) 
 		: src(_src), row(_row), col(_col), path(0) {}
 	int getMinPathRec(void) {
 		return getMinPathRec(src, 0, 0);
@@ -2936,12 +2936,16 @@ public:
 	selectSort(const vector<int> _src) : src(_src) {}
 	~selectSort(void) {}
 	void sort(void) {
-		int minIndex = 0;
-		for (int i = 0; i < src.size() - 1; ++i) {
-			minIndex = i;
-			for (int j = i+1; j < src.size() - 1; ++j)
-				minIndex = src[minIndex] < src[j] ? minIndex : j;
-			swap(src[i], src[minIndex]);
+		if (src.size() == 0) {
+			cout << "invalid input! return!\n";
+			return;
+		}
+		vectorPrint<int>(src);
+		for (size_t index = 0; index < src.size(); ++index) {
+			size_t min = index;
+			for (size_t cur = index + 1; cur < src.size(); ++cur)
+				min = (src[cur] < src[min] ? cur : min);
+			swap(src[min], src[index]);
 		}
 		vectorPrint<int>(src);
 	}
@@ -2966,9 +2970,14 @@ public:
 	insertSort(const vector<int> _src) : src(_src) {}
 	~insertSort(void) {}
 	void sort(void) {
-		for (int i = 1; i < src.size() - 1; ++i) {
-			for (int j = i - 1; (j >= 0) && (src[j + 1] < src[j]); --j)
-				swap(src[j], src[j + 1]);
+		if (src.size() == 0) {
+			cout << "invalid input! return!\n";
+			return;
+		}
+		vectorPrint<int>(src);
+		for (size_t index = 1; index < src.size(); ++index) {
+			for (int cur = index - 1; (cur >= 0) && (src[cur + 1] < src[cur]); --cur)
+				swap(src[cur], src[cur + 1]);
 		}
 		vectorPrint<int>(src);
 	}
@@ -3083,7 +3092,7 @@ public:
 			if (src[cur] < src[_right])
 				swap(src[cur++], src[++less]);
 			else if (src[cur] > src[_right])
-				swap(src[--more], src[cur]);
+				swap(src[cur],  src[--more]);
 			else
 				++cur;
 		}
@@ -3111,7 +3120,6 @@ public:
 class heapSort {
 private:
 	vector<int> src;
-public:
 	vector<int> heap;
 private:
 	void heapInsert(int _index, int _value) {
@@ -3138,6 +3146,10 @@ public:
 	heapSort(const vector<int> &_src) : src(_src) {}
 	~heapSort(void) {}
 	void sort(void) {
+		if (src.size() == 0) {
+			cout << "invalid input! return!\n";
+			return;
+		}
 		for (size_t index = 0; index < src.size(); ++index)
 			heapInsert(index, src[index]);
 
@@ -3384,7 +3396,203 @@ public:
 */ 
 /*****************************end test****************************/
 };
+//#48
+class print12n {
+private:
+	int n;
+	char *nums;
+private:
+	bool incNum(void) {
+		for (size_t index = 0; index < n; ) {
+			if (nums[index] == '9') {
+				nums[index] = '0';
+				++index;
+				if (index == n)
+					return true;
+			}
+			else {
+				++nums[index];
+				break;
+			}
+		}
+		return false;
+	}
+	void printNum(void) {
+		bool flag = true;
+		size_t index = n - 1;
+		while (1) {
+			if (flag == true && nums[index] != '0')
+				flag = false;
+			if(flag == false )
+				cout << nums[index];
+			if (index-- == 0)
+				break;
+		}
+		cout << endl;
+	}
+public:
+	print12n(const int _n = 0) : n(_n) {}
+	~print12n(void) { free(nums); }
+	void print(void) {
+		if (n == 0) {
+			cout << "invalid input! return!\n";
+			return;
+		}
 
+		if (n < 20) {  //long long 十进制表示最大值为20位
+			long long max = 0, num = 0;
+			int i = 0;
+			while (i++ < n)
+				max *= 10;
+			while (num < max)
+				cout << num++ << endl;
+		}
+
+		nums = (char*)malloc(n + 1);
+		memset(nums, '0', n + 1);
+		while (!incNum())
+			printNum();
+	}
+
+
+
+
+
+
+/****************************test code****************************/
+/*
+	const int n = 4;
+	print12n x(n);
+	x.print();
+****debug:
+*/
+/*****************************end test****************************/
+};
+//#49
+class getPow {
+private:
+	double base;
+	int exponent;
+public:
+	getPow(double _base = 1, int _exponent = 0) : base(_base), exponent(_exponent) {}
+	double getResult(void) {
+		if (base == 0.0) {
+			cout << "invalid input! return!\n";
+			return 0.0;
+		}
+
+		if (base == 1.0)
+			return base;
+		if (exponent == 0)
+			return 1.0;
+
+		double result = 1.0;
+		int exponent_tmp = abs(exponent);
+
+		if (abs(base) == 2.0) {
+			int tmp = ((int)base >> 1);
+			tmp <<= exponent_tmp;
+			result = tmp;
+		}
+		else {
+			for (int i = 0; i < exponent_tmp; ++i)
+				result *= base;
+		}
+
+		if (exponent < 0)
+			result = 1.0/result;
+
+		return result;
+	}
+
+	double getResult(double _base, int _exponent) {
+		if (exponent == 0)
+			return 1.0;
+		if (exponent == 1)
+			return base;
+
+		double result = getResult(_base, _exponent >> 1);
+		result *= result;
+		if ((exponent & 0x1) == 1)
+			result *= base;
+
+		return result;
+	}
+
+/****************************test code****************************/
+/*
+	getPow x(-2.0, -3);
+	cout << x.getResult();
+	cout << x.getResult();
+****debug: -0.125-0.125nice
+*/
+/*****************************end test****************************/
+};
+//#50
+class get1Bits {
+private:
+	int num;
+public:
+	get1Bits(int _num = 0) : num(_num) {}
+	int getResult(void) {
+		if (num == 0) {
+			cout << "invalid input! return!\n";
+			return 0;
+		}
+
+		int tmp = 1;
+		int bits = 0;
+
+		while (tmp) {
+			if (tmp & num)
+				++bits;
+			tmp <<= 1;
+		}
+
+		return bits;
+	}
+	int getResult2(void) {
+		if (num == 0) {
+			cout << "invalid input! return!\n";
+			return 0;
+		}
+
+		int bits = 0;
+		while (num) {
+			++bits;
+			num = (num - 1)&num;
+		}
+
+		return bits;
+	}
+
+
+
+
+/****************************test code****************************/
+/*
+	get1Bits x(65535);
+	cout << x.getResult() << endl;
+	cout << x.getResult2() << endl;
+****debug:  16
+			16
+			nice!
+*/
+/*****************************end test****************************/
+};
+//#51
+class type {
+
+	
+	
+	
+/****************************test code****************************/
+/*
+
+****debug:
+*/
+/*****************************end test****************************/
+};
 
 //##
 class myTest {
@@ -3500,7 +3708,44 @@ public:
 /*****************************end test****************************/
 };
 
+class test {
+private:
+	vector<int> src;
+	vector<int> heap;
+private:
+	void heapInsert(int _index, int _value) {
+		heap.push_back(_value);
+		while (heap[_index] > heap[(_index - 1) / 2]) {
+			swap(heap[_index], heap[(_index - 1) / 2]);
+			_index = ((_index - 1) / 2);
+		}
+	}
+	void heapify(size_t _index, size_t _size) {
+		size_t max = _index;
+		size_t left = (_index << 1) + 1;
 
+		while (left < _size) {
+			max = (((left + 1 < _size) && (heap[left] < heap[left + 1])) ? (left + 1) : left);
+			if (heap[_index] > heap[max])
+				break;
+			swap(heap[max], heap[_index]);
+			_index = max;
+			left = ((max << 1) + 1);
+		}
+	}
+public:
+	test(const vector<int> _src) : src(_src){}
+	void sort(void) {
+		for (size_t index = 0; index < src.size(); ++index)
+			heapInsert(index, src[index]);
+
+		for (size_t index = 1; index < heap.size(); ++index) {
+			swap(heap[0], heap[heap.size() - index]);
+			heapify(0, heap.size() - index);
+		}
+		vectorPrint<int>(heap);
+	}
+};
 
 int main(void)
 {
