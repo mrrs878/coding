@@ -3751,6 +3751,254 @@ public:
 */
 /*****************************end test****************************/
 };
+//#54
+class findMinKNumInArray {
+private:
+	vector<int> src;
+	int k;
+	multiset<int, greater<int>> res;
+private:
+	void absRight(void) {
+		sort(src.begin(), src.end());
+	}
+public:
+	findMinKNumInArray(const vector<int> &_src, int _k) : src(_src), k(_k), res() {}
+	~findMinKNumInArray(void) {}
+	void getResult(void) {
+		if ((src.size() == 0) || (k == 0)) {
+			cout << "invalid input! return!\n";
+			return;
+		}
+		for (size_t index = 0; index < src.size(); ++index) {
+			if (res.size() < k)
+				res.insert(src[index]);
+			else if (src[index] < *(res.begin())) {
+				res.erase(res.begin());
+				res.insert(src[index]);
+			}
+		}
+
+		absRight();
+		for (multiset<int, greater<int>>::iterator iter = res.begin(); iter != res.end(); ++iter) {
+			cout << *iter << "  ";
+			
+			if (*iter != src[--k]) {
+				cout << "absRight: " << src[k] << "*iter" << *iter;
+				throw("error\n");
+			}
+		}
+	}
+	
+	
+	
+	
+/****************************test code****************************/
+/*
+	srand(time(0));
+	for (int i = 1; i < 20000; ++i) {
+		vector<int> src = generateRandomArray(100, 200);
+		vectorPrint(src);
+		findMinKNumInArray x(src, src.size() % 10);
+		x.getResult();
+
+		cout << endl << endl;
+	}
+****debug:
+*/
+/*****************************end test****************************/
+};
+//#55
+class moreThanHalfNum {
+private:
+	vector<int> src;
+public:
+	moreThanHalfNum(const vector<int> &_src) : src(_src) {}
+	int getResult(void) {
+		if (src.size() == 0) {
+			cout << "invalid input! return\n";
+			return 0;
+		}
+
+		int times = 1;
+		int tmp_val = src[0];
+	
+		for (size_t index = 1; index < src.size(); ++index) {
+			if (times == 0) {
+				tmp_val = src[index];
+				times = 1;
+			}
+			else if (src[index] == tmp_val)
+				++times;
+			else
+				--times;
+		}
+
+		int tmp_times = 0;
+		for (size_t index = 0; index < src.size(); ++index)
+			tmp_times = (src[index] == tmp_val ? tmp_times + 1 : tmp_times);
+		if (tmp_times < (src.size() >> 1))
+			return 0;
+		else
+			return tmp_val;
+	}
+	
+	
+	
+	
+/****************************test code****************************/
+/*
+	vector<int> src = { 1, 2, 3, 2, 2, 2, 5, 4, 2 };
+	moreThanHalfNum x(src);
+	cout << x.getResult() << endl;
+****debug:  2
+*/
+/*****************************end test****************************/
+};
+//#56
+class selectNfromM {
+private:
+	vector<int> src;
+	vector< vector<int> > res;
+	vector<char> flags;
+	int n;
+	int m;
+private:
+	void getSelectItems(void) {
+		vector<int> tmp;
+
+		for (size_t index = 0; index < n; ++index) {
+			if (flags[index] == '1')
+				tmp.push_back(src[index]);
+		}
+
+		res.push_back(tmp);
+	}
+	size_t find10Pos(void) {
+		for (size_t index = 0; index < n - 1; ++index) {
+			if ((flags[index] == '1') && (flags[index + 1] == '0'))
+				return index;
+		}
+		return -1;
+	}
+	void swap10pos(size_t _pos) {
+		flags[_pos] = '0';
+		flags[_pos + 1] = '1';
+	}
+	void shift2Left(size_t _pos) {
+		int cnt = 0;
+
+		for (size_t index = 0; index < _pos; ++index) {
+			if (flags[index] == '1') {
+				++cnt;
+				flags[index] = '0';
+			}
+		}
+
+		for (size_t index = 0; index < cnt; ++index)
+			flags[index] = '1';
+	}
+public:
+	selectNfromM(const vector<int> &_src, int _n = 0, int _m = 0) : src(_src), res(), flags(), n(_n), m(_m) {}
+	~selectNfromM(void) {}
+	void getResult(void) {
+		if ((n == 0) || (src.size() == 0) || (n < m)) {
+			cout << "invalid input! return!\n";
+			return;
+		}
+
+		for (size_t index = 0; index < n; ++index)
+			flags.push_back((index < m ? '1' : '0'));
+
+		getSelectItems();
+		size_t pos = find10Pos();
+		while (pos != -1) {
+			swap10pos(pos);
+			shift2Left(pos);
+			getSelectItems();
+			pos = find10Pos();
+		}
+	}
+	
+	void printResult(void) {
+		for (size_t index_row = 0; index_row < res.size(); ++index_row)
+			vectorPrint<int>(res[index_row]);
+	}
+	
+	
+	
+/****************************test code****************************/
+/*
+	vector<int> src = { 1, 2, 3, 4, 5, 6 };
+	selectNfromM x(src, src.size(), src.size() - 2);
+	x.getResult();
+	x.printResult();
+****debug:  1 2 3 4
+			1 2 3 5
+			1 2 4 5
+			1 3 4 5
+			2 3 4 5
+			1 2 3 6
+			1 2 4 6
+			1 3 4 6
+			2 3 4 6
+			1 2 5 6
+			1 3 5 6
+			2 3 5 6
+			1 4 5 6
+			2 4 5 6
+			3 4 5 6
+			nice!
+*/
+/*****************************end test****************************/
+};
+//#56
+class permutation {
+private:
+	vector<int> src;
+
+private:
+	void getResult(size_t _pos) {
+		if (_pos == src.size())
+			vectorPrint<int>(src);
+		else {
+			for (size_t index = _pos; index < src.size(); ++index) {
+				swap(src[_pos], src[index]);
+
+				getResult(_pos + 1);
+
+				swap(src[_pos], src[index]);
+			}
+		}
+	}
+public:
+	permutation(const vector<int> &_src) : src(_src){}
+	~permutation(void) {}
+	void getResult(void) {
+		if (src.size() == 0) {
+			cout << "invalid input! return!\n";
+			return;
+		}
+
+		getResult(0);
+	}
+	
+	
+	
+	
+	
+/****************************test code****************************/
+/*
+
+****debug:
+*/
+/*****************************end test****************************/
+};
+
+
+
+
+
+
 
 
 //##
@@ -3924,8 +4172,9 @@ int main(void)
 	//x.binaryTreePrint();
 	//node *root3 = x.generateFixedBinaryTree(src3);
 	//x.binaryTreePrint();
-	
-
+	vector<int> src = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+	permutation x(src);
+	x.getResult();
 
 
 
