@@ -8,6 +8,8 @@
 #include <map>
 #include <unordered_map>
 #include <algorithm>
+#include <functional>
+#include <xfunctional>
 
 
 using namespace std;
@@ -3581,18 +3583,175 @@ public:
 /*****************************end test****************************/
 };
 //#51
-class type {
+class numberOf1Between1AndN {
+private:
+	int n;
+public:
+	numberOf1Between1AndN(int _n) : n(_n) {}
+	~numberOf1Between1AndN(void) {}
+	int getResult(void) {
+		if (n == 0) {
+			cout << "invalid input! return!\n";
+			return 0;
+		}
 
+		int base = 1, round = n, weight = 0;
+		int result = 0;
+		while (round > 0) {
+			weight = (round % 10);
+			round /= 10;
+			result += round * base;
+			if (weight == 1)
+				result += (n % base) + 1;
+			else if (weight > 1)
+				result += base;
+			base *= 10;
+		}
+
+		return result;
+	}
 	
 	
 	
 /****************************test code****************************/
 /*
-
-****debug:
+	numberOf1Between1AndN x(12);
+	cout << x.getResult();
+****debug:  5
 */
 /*****************************end test****************************/
 };
+//#52
+class findGreatestSumOfSubArray {
+private:
+	vector<int> src;
+public:
+	findGreatestSumOfSubArray(const vector<int> &_src) : src(_src) {}
+	~findGreatestSumOfSubArray(void) {}
+	int getResult(void) {
+		if (src.size() == 0) {
+			cout << "invalid input! return!\n";
+			return 0;
+		}
+
+		int cur_sum = 0, greatest_sum = 0;
+
+		for (size_t index = 0; index < src.size(); ++index) {
+			cur_sum = (cur_sum > 0 ? (cur_sum + src[index]) : src[index]);
+			greatest_sum = MAX(cur_sum, greatest_sum);
+		}
+
+		return greatest_sum;
+	}
+	
+	
+	
+	
+/****************************test code****************************/
+/*
+	vector<int> src = { 1, -2, 3, 10, -4, 7, 2, -5 };
+	findGreatestSumOfSubArray x(src);
+	cout << x.getResult();
+****debug:  18
+*/
+/*****************************end test****************************/
+};
+//#53
+class medianInStream {
+private:
+	vector<int> src;
+	vector<int> max_heap;
+	vector<int> min_heap;
+private:
+	float getMedian(int _num) {
+		int tmp = 0;
+
+		if (src.size() & 1) {
+			if ((min_heap.size() > 0 && (_num > min_heap[0]))) {
+				min_heap.push_back(_num);
+				push_heap(min_heap.begin(), min_heap.end(), greater<int>());
+
+				_num = min_heap[0];
+				pop_heap(min_heap.begin(), min_heap.end(), greater<int>());
+				min_heap.pop_back();
+			}
+			max_heap.push_back(_num);
+			push_heap(max_heap.begin(), max_heap.end(), less<int>());
+		}
+		else {
+			if ((max_heap[0] > 0) && (_num < max_heap[0])) {
+				max_heap.push_back(_num);
+				push_heap(max_heap.begin(), max_heap.end(), less<int>());
+
+				_num = max_heap[0];
+				pop_heap(max_heap.begin(), max_heap.end(), less<int>());
+				max_heap.pop_back();
+			}
+			min_heap.push_back(_num);
+			push_heap(min_heap.begin(), min_heap.end(), greater<int>());
+		}
+
+		if (src.size() & 1)
+			return (float)max_heap[0];
+		else
+			return (((float)max_heap[0] + min_heap[0]) / 2);
+	}
+public:
+	medianInStream(void) : src(), max_heap(), min_heap() {}
+	~medianInStream(void) {}
+	void getIstream(void) {
+		int tmp = 0;
+
+		cout << "please enter src(9999 to end): \n";
+		cin >> tmp;
+		while (tmp != 9999) {
+			src.push_back(tmp);
+
+			cout << "your enter src: ";
+			vectorPrint<int>(src);
+			cout << "median is: " << getMedian(tmp) << endl << endl;
+
+			cout << "please enter src(9999 to end): \n";
+			cin >> tmp;
+		}
+	}
+
+	
+/****************************test code****************************/
+/*
+	medianInStream x;
+	x.getIstream();
+****debug:  please enter src(9999 to end):
+			12
+			your enter src: 12
+			median is: 12
+
+			please enter src(9999 to end):
+			13
+			your enter src: 12 13
+			median is: 12.5
+
+			please enter src(9999 to end):
+			14
+			your enter src: 12 13 14
+			median is: 13
+
+			please enter src(9999 to end):
+			1
+			your enter src: 12 13 14 1
+			median is: 12.5
+
+			please enter src(9999 to end):
+			2
+			your enter src: 12 13 14 1 2
+			median is: 12
+
+			please enter src(9999 to end):
+
+*/
+/*****************************end test****************************/
+};
+
 
 //##
 class myTest {
@@ -3766,6 +3925,10 @@ int main(void)
 	//node *root3 = x.generateFixedBinaryTree(src3);
 	//x.binaryTreePrint();
 	
+
+
+
+
 
 
 
